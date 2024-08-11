@@ -131,7 +131,7 @@ def analysis3(
                 print (result)
 
                 if result['verified']:
-                    for x, y, w, h in faces_coordinates:                        
+                    for x, y, w, h, m, z in faces_coordinates:                        
                         color = (255, 0, 0)
                         cv2.rectangle(img, (x, y), (x + w, y + h), color, 1)
                         cv2.putText(img,result['nombre'],(x + w, y + 10),cv2.FONT_HERSHEY_SIMPLEX,0.5,TEXT_COLOR,1,)

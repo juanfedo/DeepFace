@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional, Union, List
 
 # 3rd party dependencies
 import numpy as np
-
+import json
 # project dependencies
 from deepface.modules import modeling, verification
 from deepface.models.FacialRecognition import FacialRecognition
@@ -146,43 +146,6 @@ def verify2(
         "verified": False
     }
     for imagen in imagenes:
-        # extract faces from img2
-        if isinstance(imagen[2], list):
-            # given image is already pre-calculated embedding
-            if not all(isinstance(dim, float) for dim in imagen[2]):
-                raise ValueError(
-                    "When passing imagen as a list, ensure that all its items are of type float."
-                )
-
-            if silent is False:
-                logger.warn(
-                    "You passed 2nd image as pre-calculated embeddings."
-                    f"Please ensure that embeddings have been calculated for the {model_name} model."
-                )
-
-            if len(imagen[2]) != dims:
-                raise ValueError(
-                    f"embeddings of {model_name} should have {dims} dimensions,"
-                    f" but it has {len(imagen[2])} dimensions input"
-                )
-
-            img2_embeddings = [imagen[2]]
-            img2_facial_areas = [None]
-        else:
-            try:
-                img2_embeddings, img2_facial_areas = verification.__extract_faces_and_embeddings(
-                    img_path=imagen[2],
-                    model_name=model_name,
-                    detector_backend=detector_backend,
-                    enforce_detection=enforce_detection,
-                    align=align,
-                    expand_percentage=expand_percentage,
-                    normalization=normalization,
-                    anti_spoofing=anti_spoofing,
-                )
-            except ValueError as err:
-                raise ValueError("Exception while processing imagen") from err
-
         no_facial_area = {
             "x": None,
             "y": None,
@@ -195,11 +158,11 @@ def verify2(
         distances = []
         facial_areas = []
         for idx, img1_embedding in enumerate(img1_embeddings):
-            for idy, img2_embedding in enumerate(img2_embeddings):
+            for idy, img2_embedding in enumerate(json.loads(imagen[2])):
                 distance = verification.find_distance(img1_embedding, img2_embedding, distance_metric)
                 distances.append(distance)
                 facial_areas.append(
-                    (img1_facial_areas[idx] or no_facial_area, img2_facial_areas[idy] or no_facial_area)
+                    (img1_facial_areas[idx] or no_facial_area, json.loads(imagen[3])[idy] or no_facial_area)
                 )
 
         # find the face pair with minimum distance
