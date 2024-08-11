@@ -20,7 +20,6 @@ from deepface import __version__
 logger = log.get_singletonish_logger()
 
 def stream3(
-    db_path: str = "",
     imagenes: [] = [],
     model_name: str = "VGG-Face",
     detector_backend: str = "opencv",
@@ -35,9 +34,6 @@ def stream3(
     Run real time face recognition and facial attribute analysis
 
     Args:
-        db_path (string): Path to the folder containing image files. All detected faces
-            in the database will be considered in the decision-making process.
-
         model_name (str): Model for face recognition. Options: VGG-Face, Facenet, Facenet512,
             OpenFace, DeepFace, DeepID, Dlib, ArcFace, SFace and GhostFaceNet (default is VGG-Face).
 
@@ -66,7 +62,6 @@ def stream3(
     frame_threshold = max(frame_threshold, 1)
 
     streaming_own.analysis3(
-        db_path=db_path,
         imagenes = imagenes,
         model_name=model_name,
         detector_backend=detector_backend,

@@ -25,7 +25,6 @@ TEXT_COLOR = (255, 255, 255)
 
 # pylint: disable=unused-variable
 def analysis3(
-    db_path: str,
     imagenes: [] = [],
     model_name="VGG-Face",
     detector_backend="opencv",

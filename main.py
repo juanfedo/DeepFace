@@ -18,5 +18,5 @@ for imagen in images:
 
 #dfs = DeepFace.find2(  img_path = "D:\\Python\\deepface\\fotos\\hug.jpg",db_images=imagenes,refresh_database = False)
 
-DeepFace_own.stream3(db_path = "D:\\Python\\deepface\\database", imagenes = imagenes)
+DeepFace_own.stream3(imagenes = imagenes)
 print ('Finalizado')
