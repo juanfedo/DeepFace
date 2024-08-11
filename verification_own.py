@@ -13,7 +13,7 @@ from deepface.commons import logger as log
 logger = log.get_singletonish_logger()
 
 
-def verify(
+def verify2(
     img1_path: Union[str, np.ndarray, List[float]],
     imagenes: [] = [],
     model_name: str = "VGG-Face",
@@ -142,6 +142,9 @@ def verify(
             raise ValueError("Exception while processing img1_path") from err
 
     print (f"numero de imagenes {len(imagenes)}")
+    resp_obj = {
+        "verified": False
+    }
     for imagen in imagenes:
         # extract faces from img2
         if isinstance(imagen[2], list):
@@ -217,8 +220,6 @@ def verify(
             "time": round(toc - tic, 2),
             "nombre": imagen[1]
         }
+    
+    return resp_obj
 
-        print (resp_obj)
-
-        if distance <= threshold:
-            return resp_obj

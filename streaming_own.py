@@ -12,6 +12,7 @@ import cv2
 from deepface import DeepFace
 from deepface.commons import logger as log
 from deepface.modules import streaming
+import verification_own
 
 logger = log.get_singletonish_logger()
 
@@ -120,33 +121,21 @@ def analysis3(
                     img=raw_img, faces_coordinates=faces_coordinates, anti_spoofing=anti_spoofing
                 )
 
-                result = DeepFace.verify(
+                result = verification_own.verify2(
                     img1_path = img,
                     imagenes = imagenes,
                     enforce_detection = False,
                     threshold=0.8
                 )
 
-                if result is not None and result['verified']:
-                    print('ENCONTRADO')
-                ## age, gender and emotion analysis
-                #img = perform_demography_analysis(
-                #    enable_face_analysis=enable_face_analysis,
-                #    img=raw_img,
-                #    faces_coordinates=faces_coordinates,
-                #    detected_faces=detected_faces,
-                #)
+                print (result)
 
-                # facial recogntion analysis
-                #img = perform_facial_recognition(
-                #    img=img,
-                #    faces_coordinates=faces_coordinates,
-                #    detected_faces=detected_faces,
-                #    db_path=db_path,
-                #    detector_backend=detector_backend,
-                #    distance_metric=distance_metric,
-                #    model_name=model_name,
-                #)
+                if result['verified']:
+                    for x, y, w, h in faces_coordinates:                        
+                        color = (255, 0, 0)
+                        cv2.rectangle(img, (x, y), (x + w, y + h), color, 1)
+                        cv2.putText(img,result['nombre'],(x + w, y + 10),cv2.FONT_HERSHEY_SIMPLEX,0.5,TEXT_COLOR,1,)
+                    print('ENCONTRADO')
 
                 # freeze the img after analysis
                 freezed_img = img.copy()
