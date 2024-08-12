@@ -24,6 +24,88 @@ IDENTIFIED_IMG_SIZE = 112
 TEXT_COLOR = (255, 255, 255)
 
 # pylint: disable=unused-variable
+def analysis4(
+    img: np.ndarray,
+    imagenes: [] = [],
+    model_name="VGG-Face",
+    detector_backend="opencv",
+    anti_spoofing: bool = False,
+)-> np.ndarray:
+    """
+    Run real time face recognition and facial attribute analysis
+
+    Args:
+        db_path (string): Path to the folder containing image files. All detected faces
+            in the database will be considered in the decision-making process.
+
+        model_name (str): Model for face recognition. Options: VGG-Face, Facenet, Facenet512,
+            OpenFace, DeepFace, DeepID, Dlib, ArcFace, SFace and GhostFaceNet (default is VGG-Face).
+
+        detector_backend (string): face detector backend. Options: 'opencv', 'retinaface',
+            'mtcnn', 'ssd', 'dlib', 'mediapipe', 'yolov8', 'centerface' or 'skip'
+            (default is opencv).
+
+        distance_metric (string): Metric for measuring similarity. Options: 'cosine',
+            'euclidean', 'euclidean_l2' (default is cosine).
+
+        enable_face_analysis (bool): Flag to enable face analysis (default is True).
+
+        source (Any): The source for the video stream (default is 0, which represents the
+            default camera).
+
+        time_threshold (int): The time threshold (in seconds) for face recognition (default is 5).
+
+        frame_threshold (int): The frame threshold for face recognition (default is 5).
+
+        anti_spoofing (boolean): Flag to enable anti spoofing (default is False).
+
+    Returns:
+        None
+    """
+    # initialize models (esto se movio a server.py antes del while)
+
+    #streaming.build_facial_recognition_model(model_name=model_name)
+
+    num_frames_with_faces = 0
+
+    # we are adding some figures into img such as identified facial image, age, gender
+    # that is why, we need raw image itself to make analysis
+    raw_img = img.copy()
+
+    faces_coordinates = []
+    faces_coordinates = streaming.grab_facial_areas(
+        img=img, detector_backend=detector_backend, anti_spoofing=anti_spoofing
+    )
+
+    img = streaming.highlight_facial_areas(img=img, faces_coordinates=faces_coordinates)
+
+    num_frames_with_faces = num_frames_with_faces + 1 if len(faces_coordinates) else 0
+
+    # add analyze results into img - derive from raw_img
+    img = streaming.highlight_facial_areas(
+        img=raw_img, faces_coordinates=faces_coordinates, anti_spoofing=anti_spoofing
+    )
+
+    result = verification_own.verify2(
+        img1_path = img,
+        imagenes = imagenes,
+        enforce_detection = False,
+        threshold=0.8
+    )
+
+    print (result)
+
+    if result['verified']:
+        for x, y, w, h, m, z in faces_coordinates:                        
+            color = (255, 0, 0)
+            cv2.rectangle(img, (x, y), (x + w, y + h), color, 1)
+            cv2.putText(img,result['nombre'],(x + w, y + 10),cv2.FONT_HERSHEY_SIMPLEX,0.5,TEXT_COLOR,1,)
+        print('ENCONTRADO')
+    
+    return img
+
+
+# pylint: disable=unused-variable
 def analysis3(
     imagenes: [] = [],
     model_name="VGG-Face",

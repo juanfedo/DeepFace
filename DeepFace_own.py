@@ -19,6 +19,49 @@ from deepface import __version__
 
 logger = log.get_singletonish_logger()
 
+def stream4(
+    img: np.ndarray,
+    imagenes: [] = [],
+    model_name: str = "VGG-Face",
+    detector_backend: str = "opencv",
+    anti_spoofing: bool = False,
+) -> np.ndarray:
+    """
+    Run real time face recognition and facial attribute analysis
+
+    Args:
+        model_name (str): Model for face recognition. Options: VGG-Face, Facenet, Facenet512,
+            OpenFace, DeepFace, DeepID, Dlib, ArcFace, SFace and GhostFaceNet (default is VGG-Face).
+
+        detector_backend (string): face detector backend. Options: 'opencv', 'retinaface',
+            'mtcnn', 'ssd', 'dlib', 'mediapipe', 'yolov8', 'centerface' or 'skip'
+            (default is opencv).
+
+        distance_metric (string): Metric for measuring similarity. Options: 'cosine',
+            'euclidean', 'euclidean_l2' (default is cosine).
+
+        enable_face_analysis (bool): Flag to enable face analysis (default is True).
+
+        source (Any): The source for the video stream (default is 0, which represents the
+            default camera).
+
+        time_threshold (int): The time threshold (in seconds) for face recognition (default is 5).
+
+        frame_threshold (int): The frame threshold for face recognition (default is 5).
+
+        anti_spoofing (boolean): Flag to enable anti spoofing (default is False).
+    Returns:
+        None
+    """
+
+    return streaming_own.analysis4(
+        img = img,
+        imagenes = imagenes,
+        model_name=model_name,
+        detector_backend=detector_backend,
+        anti_spoofing=anti_spoofing,
+    )
+
 def stream3(
     imagenes: [] = [],
     model_name: str = "VGG-Face",

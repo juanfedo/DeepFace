@@ -17,6 +17,5 @@ for imagen in images:
 ###veri = DeepFace.verify(img1_path = "D:\\Python\\deepface\\fotos\\hug.jpg", imagenes = imagenes)
 
 #dfs = DeepFace.find2(  img_path = "D:\\Python\\deepface\\fotos\\hug.jpg",db_images=imagenes,refresh_database = False)
-
-DeepFace_own.stream3(imagenes = imagenes)
+DeepFace_own.stream4(imagenes = imagenes)
 print ('Finalizado')
